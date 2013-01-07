@@ -5,6 +5,9 @@ th{
 .row9 th{
     border-bottom:2px solid #000000;
 }
+.col9{
+    border-right:2px solid #000000;
+}
 .col4{
     border-left:5px solid #000000;
 }
@@ -17,70 +20,4 @@ th{
 .row7 th{
     border-top:5px solid #000000;
 }
-.col9{
-    border-right:2px solid #000000;
-}
-/*
-.col1{
-    background-color: #DEF3CA;
-}
-.col2{
-    background-color: #DEF3CA;
-}
-.col3{
-    background-color: #DEF3CA;
-}
-.col4{
-    background-color: #45A8DF;
-}
-.col5{
-    background-color: #45A8DF;
-}
-.col6{
-    background-color: #45A8DF;
-}
-.col7{
-    background-color: #DEF3CA;
-}
-.col8{
-    background-color: #DEF3CA;
-}
-.col9{
-    background-color: #DEF3CA;
-}
-.row4 th{
-    background-color: #45A8DF;
-}
-.row5 th{
-    background-color: #45A8DF;
-}
-.row6 th{
-    background-color: #45A8DF;
-}
-.row4 .col4{
-    background-color: #DEF3CA;
-}
-.row4 .col5{
-    background-color: #DEF3CA;
-}
-.row4 .col6{
-    background-color: #DEF3CA;
-}
-.row5 .col4{
-    background-color: #DEF3CA;
-}
-.row5 .col5{
-    background-color: #DEF3CA;
-}
-.row5 .col6{
-    background-color: #DEF3CA;
-}
-.row6 .col4{
-    background-color: #DEF3CA;
-}
-.row6 .col5{
-    background-color: #DEF3CA;
-}
-.row6 .col6{
-    background-color: #DEF3CA;
-}*/
+

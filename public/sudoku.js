@@ -1,5 +1,5 @@
 (function() {
-  var box_possibilities, box_range, box_removing, box_repeats, box_solve, column_possibilities, column_removing, column_repeats, has_contradiction, one_to_nine, output_contradiction, output_solved, remove_value, row_possibilities, row_removing, row_repeats, solve, solved, unique_box_possibility, unique_column_possibility, unique_row_possibility, update_grid, zero_possibilities;
+  var box_possibilities, box_range, box_removing, box_repeats, box_solve, column_possibilities, column_removing, column_repeats, grid_clone, guess, guess_to_solve, has_changed, has_contradiction, one_to_nine, output_contradiction, output_solved, remove_value, row_possibilities, row_removing, row_repeats, solve, solved, unique_box_possibility, unique_column_possibility, unique_row_possibility, update_grid, zero_possibilities;
 
   window.draw = function() {
     var boxes, i, q, rows, _ref, _ref2, _results;
@@ -67,15 +67,15 @@
     }
     b = one_to_nine();
     grid = [];
-    row1 = [1, b, b, b, b, b, b, b, b];
-    row2 = [2, b, b, b, b, b, b, b, b];
-    row3 = [3, b, b, b, b, b, b, b, b];
-    row4 = [4, b, b, b, b, b, b, b, b];
-    row5 = [5, b, b, b, b, b, b, b, b];
-    row6 = [b, b, b, b, b, b, b, b, b];
-    row7 = [b, b, b, b, b, b, b, b, b];
-    row8 = [b, b, b, b, b, b, b, b, b];
-    row9 = [b, b, b, b, b, 6, 7, 8, 9];
+    row1 = [b, b, b, 2, b, b, b, 6, 3];
+    row2 = [3, b, b, b, b, 5, 4, b, 1];
+    row3 = [b, b, 1, b, b, 3, 9, 8, b];
+    row4 = [b, b, b, b, b, b, b, 9, b];
+    row5 = [b, b, b, 5, 3, 8, b, b, b];
+    row6 = [b, 3, b, b, b, b, b, b, b];
+    row7 = [b, 2, 6, 3, b, b, 5, b, b];
+    row8 = [5, b, 3, 7, b, b, b, b, 8];
+    row9 = [4, 7, b, b, b, 1, b, b, b];
     grid = [row1, row2, row3, row4, row5, row6, row7, row8, row9];
     solved = solve(grid);
     if (solved === false) output_contradiction();
@@ -83,24 +83,32 @@
   };
 
   solve = function(grid) {
-    var rounds_without_updates, solve, solvers, _ref;
+    var grid_snapshot, rounds_without_updates, solve, solvers, _ref;
     rounds_without_updates = 0;
     solvers = [row_removing, column_removing, box_removing, row_possibilities, column_possibilities, box_possibilities];
     while (solved(grid) === false) {
+      grid_snapshot = grid_clone(grid);
       if (has_contradiction(grid)) return false;
       for (solve = 0, _ref = solvers.length - 1; solve <= _ref; solve += 1) {
         grid = solvers[solve](grid);
         grid = update_grid(grid);
+        if (has_changed(grid_snapshot, grid)) break;
       }
+      if (has_changed(grid_snapshot, grid) === false) {
+        rounds_without_updates++;
+      } else {
+        rounds_without_updates = 0;
+      }
+      if (rounds_without_updates === 4) grid = guess(grid);
     }
     return grid;
   };
 
   one_to_nine = function() {
-    var counter, one_to_nine_array;
+    var fuck, one_to_nine_array;
     one_to_nine_array = [];
-    for (counter = 0; counter <= 8; counter += 1) {
-      one_to_nine_array[counter] = counter + 1;
+    for (fuck = 0; fuck <= 8; fuck += 1) {
+      one_to_nine_array[fuck] = fuck + 1;
     }
     return one_to_nine_array;
   };
@@ -258,7 +266,9 @@
     var col_vals, only_possible_place, other_possible_val, _i, _len, _ref;
     only_possible_place = true;
     for (col_vals = 0; col_vals <= 8; col_vals += 1) {
-      if ((col_vals === columns) || (Array.isArray(grid[rows][col_vals]) === false)) {
+      if (col_vals === columns) continue;
+      if (Array.isArray(grid[rows][col_vals]) === false) {
+        if (grid[rows][col_vals] === possible_val) only_possible_place = false;
         continue;
       }
       _ref = grid[rows][col_vals];
@@ -292,7 +302,9 @@
     var only_possible_place, other_possible_val, row_vals, _i, _len, _ref;
     only_possible_place = true;
     for (row_vals = 0; row_vals <= 8; row_vals += 1) {
-      if ((row_vals === rows) || (Array.isArray(grid[row_vals][columns]) === false)) {
+      if (row_vals === rows) continue;
+      if (Array.isArray(grid[row_vals][columns]) === false) {
+        if (grid[row_vals][columns] === possible_val) only_possible_place = false;
         continue;
       }
       _ref = grid[row_vals][columns];
@@ -331,7 +343,11 @@
       row_count = row_range[_i];
       for (_j = 0, _len2 = column_range.length, _step2 = 1; _j < _len2; _j += _step2) {
         column_count = column_range[_j];
-        if (((row_count === rows) && (column_count === columns)) || (Array.isArray(grid[row_count][column_count]) === false)) {
+        if ((row_count === rows) && (column_count === columns)) continue;
+        if (Array.isArray(grid[row_count][column_count]) === false) {
+          if (grid[row_count][column_count] === possible_val) {
+            only_possible_place = false;
+          }
           continue;
         }
         _ref = grid[row_count][column_count];
@@ -409,6 +425,75 @@
       }
     }
     return false;
+  };
+
+  has_changed = function(grid_snapshot, grid) {
+    var columns, rows;
+    for (rows = 0; rows <= 8; rows += 1) {
+      for (columns = 0; columns <= 8; columns += 1) {
+        if ((Array.isArray(grid_snapshot[rows][columns])) && (Array.isArray(grid[rows][columns]) === false)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  };
+
+  guess = function(grid) {
+    var columns, lowest_column, lowest_length, lowest_row, rows;
+    lowest_length = 10;
+    lowest_row;
+    lowest_column;
+    for (rows = 0; rows <= 8; rows += 1) {
+      for (columns = 0; columns <= 8; columns += 1) {
+        if (Array.isArray(grid[rows][columns]) === false) continue;
+        if (grid[rows][columns].length < lowest_length) {
+          lowest_row = rows;
+          lowest_column = columns;
+          lowest_length = grid[rows][columns].length;
+        }
+        if (lowest_length === 2) break;
+      }
+      if (lowest_length === 2) break;
+    }
+    return guess_to_solve(grid, lowest_row, lowest_column);
+  };
+
+  guess_to_solve = function(grid, lowest_row, lowest_column) {
+    var possibilities, temporary_grid, _i, _len, _ref, _step;
+    _ref = grid[lowest_row][lowest_column];
+    for (_i = 0, _len = _ref.length, _step = 1; _i < _len; _i += _step) {
+      possibilities = _ref[_i];
+      temporary_grid = grid_clone(grid);
+      temporary_grid[lowest_row][lowest_column] = grid[lowest_row][lowest_column][possibilities];
+      temporary_grid = solve(temporary_grid);
+      if (temporary_grid !== false) {
+        grid = temporary_grid;
+        break;
+      }
+    }
+    if (temporary_grid === false) return false;
+    return grid;
+  };
+
+  grid_clone = function(grid) {
+    var clone, columns, possibilities, rows, _i, _len, _ref, _step;
+    clone = [[], [], [], [], [], [], [], [], []];
+    for (rows = 0; rows <= 8; rows += 1) {
+      for (columns = 0; columns <= 8; columns += 1) {
+        if (Array.isArray(grid[rows][columns])) {
+          clone[rows][columns] = [];
+          _ref = grid[rows][columns];
+          for (_i = 0, _len = _ref.length, _step = 1; _i < _len; _i += _step) {
+            possibilities = _ref[_i];
+            clone[rows][columns][possibilities] = grid[rows][columns][possibilities];
+          }
+        } else {
+          clone[rows][columns] = grid[rows][columns];
+        }
+      }
+    }
+    return clone;
   };
 
 }).call(this);

@@ -60,7 +60,7 @@ window.get_input = ->
       get_inputs++
 
 #These next lines are for testing. For convenience, you can define the grid in code
-  
+  ###
   b = one_to_nine()
   grid = []
   row1 = [b,b,b,2,b,b,b,6,3]
@@ -73,7 +73,7 @@ window.get_input = ->
   row8 = [5,b,3,7,b,b,b,b,8]
   row9 = [4,7,b,b,b,1,b,b,b]
   grid = [row1, row2, row3, row4, row5, row6,row7,row8,row9]
-          
+  ###        
   solved = solve(grid)
   if(solved == false)
     output_contradiction()    
@@ -372,7 +372,7 @@ guess = (grid) ->
 
 #Tries to solve the grid by applying guesses at [lowest_row][lowest_column]. Returns false if impossible to solve
 guess_to_solve = (grid,lowest_row,lowest_column) ->
-  for possibilities in grid[lowest_row][lowest_column] by 1
+  for possibilities in [0..(grid[lowest_row][lowest_column].length - 1)] by 1
     temporary_grid = grid_clone(grid)
     temporary_grid[lowest_row][lowest_column] = grid[lowest_row][lowest_column][possibilities]
     temporary_grid = solve(temporary_grid)
@@ -390,7 +390,7 @@ grid_clone = (grid) ->
     for columns in [0..8] by 1
       if(Array.isArray(grid[rows][columns]))
         clone[rows][columns] = []
-        for possibilities in grid[rows][columns] by 1
+        for possibilities in [0..(grid[rows][columns].length - 1)] by 1
           clone[rows][columns][possibilities] = grid[rows][columns][possibilities]
       else
         clone[rows][columns] = grid[rows][columns]

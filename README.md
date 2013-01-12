@@ -3,7 +3,7 @@ coffee_sudoku
 
 A sudoku solver written in coffeescript, html, css, and sinatra. All the hard calculating is done client side.
 
-You can view the finished result at sudokusolver.nielmalhotra.com
+You can view the finished result <a href="http://sudokusolver.nielmalhotra.com">here</a>.
 
 This solver is pretty simple. It creates a 2d array of the entire sudoku board. Then, it adds integers if the value of a position is known, and puts an array of the values 1 to 9 at the position if the value of a position is not know.
 

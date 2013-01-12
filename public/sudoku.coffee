@@ -139,7 +139,7 @@ output_solved = (solved) ->
 #Updates the HTML to show that there was a contradiction
 output_contradiction = ->
   message = document.getElementById('messages')
-  message.innerHTML = "EPIC FAIL! Your sudoku puzzle is impossible to solve. Click refresh to get a new sudoku board and check to make sure that you entered your sudoku puzzle correctly"
+  message.innerHTML = "EPIC FAIL! Your sudoku puzzle is impossible to solve. Edit your sudoku puzzle and try again."
   
 
 #Removes possible values from a position if that value appears in the same row

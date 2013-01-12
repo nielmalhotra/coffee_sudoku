@@ -161,7 +161,7 @@
   output_contradiction = function() {
     var message;
     message = document.getElementById('messages');
-    return message.innerHTML = "EPIC FAIL! Your sudoku puzzle is impossible to solve. Click refresh to get a new sudoku board and check to make sure that you entered your sudoku puzzle correctly";
+    return message.innerHTML = "EPIC FAIL! Your sudoku puzzle is impossible to solve. Edit your sudoku puzzle and try again.";
   };
 
   row_removing = function(grid) {

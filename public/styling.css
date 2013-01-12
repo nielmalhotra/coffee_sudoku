@@ -1,6 +1,11 @@
+table{
+    table-layout: fixed;
+    width: 200px;
+}
 th{
     border-top:2px solid #000000;
     border-left:2px solid #000000;
+    width:75px;
 }
 .row9 th{
     border-bottom:2px solid #000000;

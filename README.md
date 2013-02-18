@@ -5,9 +5,9 @@ A sudoku solver written in coffeescript, html, css, and sinatra. All the hard ca
 
 You can view the finished result <a href="http://sudokusolver.nielmalhotra.com">here</a>.
 
-This solver is pretty simple. It creates a 2d array of the entire sudoku board. Then, it adds integers if the value of a position is known, and puts an array of the values 1 to 9 at the position if the value of a position is not know.
+This solver is pretty simple. It creates a 2d array of the entire sudoku board. Position 0,0 is the top left corner and 8,8 is the bottom right corner. If the value of a position is known, then that position in the 2d array is an integer. If the value is not known, then the value at that position is an array of the possible values of that position.
 
-The solver then removes values from these positions if that value occurs in the same box, row, or column. If an array has one value, then that position in the grid is updated to only hold that integer.
+The solver then removes values from positions if that value occurs in the same box, row, or column. If an array has one value, then that position in the grid is updated to only hold that integer.
 
 Next, the solver sets a value of a position if it's the only position in its row, column, or box that could possibly have that value.
 

@@ -8,14 +8,14 @@ window.draw = ->
   rows = document.getElementsByTagName("tr")
   for q in [0..(rows.length - 1)] by 1
     rows[q].innerHTML = '<th class="col1"></th>
-	    <th class="col2"></th>
-	    <th class="col3"></th>
-	    <th class="col4"></th>
-	    <th class="col5"></th>
-	    <th class="col6"></th>
-	    <th class="col7"></th>
-	    <th class="col8"></th>
-	    <th class="col9"></th>'
+            <th class="col2"></th>
+            <th class="col3"></th>
+            <th class="col4"></th>
+            <th class="col5"></th>
+            <th class="col6"></th>
+            <th class="col7"></th>
+            <th class="col8"></th>
+            <th class="col9"></th>'
   boxes = document.getElementsByTagName("th")
   for i in [0..(boxes.length - 1)] by 1
     boxes[i].innerHTML = '<select class="input">
@@ -51,12 +51,12 @@ window.get_input = ->
   for create_grid in [0..8] by 1
     grid[create_grid] = []
   get_inputs = 0
-  for rows in [0..8] by 1
-    for columns in [0..8] by 1
+  for a_row in [0..8] by 1
+    for a_column in [0..8] by 1
       if(inputs[get_inputs].value == "blank")
-        grid[rows][columns] = one_to_nine() 
+        grid[a_row][a_column] = one_to_nine()
       else
-        grid[rows][columns] = parseInt(inputs[get_inputs].value)  
+        grid[a_row][a_column] = parseInt(inputs[get_inputs].value)
       get_inputs++
 
 #These next lines are for testing. For convenience, you can define the grid in code
@@ -73,17 +73,17 @@ window.get_input = ->
   row8 = [5,b,3,7,b,b,b,b,8]
   row9 = [4,7,b,b,b,1,b,b,b]
   grid = [row1, row2, row3, row4, row5, row6,row7,row8,row9]
-  ###        
+  ###
   solved = solve(grid)
   if(solved == false)
-    output_contradiction()    
+    output_contradiction()
   output_solved(solved)
 
 #Solves the sudoku puzzle and returns it as a 2d array
 #If there is a contradiction, then it returns false
-solve = (grid) ->        
+solve = (grid) ->
   #This project is not complete. To add new logic just define a function that accepts grid,
-  #removes values from the arrays at unsolved spots, and returns the new grid array. Then add it to the solvers array  
+  #removes values from the arrays at unsolved spots, and returns the new grid array. Then add it to the solvers array
   rounds_without_updates = 0
   solvers = [row_removing, column_removing, box_removing, row_possibilities, column_possibilities, box_possibilities]
   while(solved(grid) == false)
@@ -112,18 +112,18 @@ one_to_nine = ->
 
 #Any position there is only one possibility, puts that number into grid and returns updated grid
 update_grid = (grid) ->
-  for rows in [0..8] by 1
-    for columns in [0..8] by 1
-       if(Array.isArray(grid[rows][columns]))
-         if(grid[rows][columns].length == 1)
-           grid[rows][columns] = grid[rows][columns][0]
+  for a_row in [0..8] by 1
+    for a_column in [0..8] by 1
+       if(Array.isArray(grid[a_row][a_column]))
+         if(grid[a_row][a_column].length == 1)
+           grid[a_row][a_column] = grid[a_row][a_column][0]
   return grid
 
 #Check if the sudoku grid is solved
 solved = (grid) ->
-  for rows in [0..8] by 1
-    for columns in [0..8] by 1
-      if(Array.isArray(grid[rows][columns]))
+  for a_row in [0..8] by 1
+    for a_column in [0..8] by 1
+      if(Array.isArray(grid[a_row][a_column]))
         return false
   return true
 
@@ -131,26 +131,26 @@ solved = (grid) ->
 output_solved = (solved) ->
   boxes = document.getElementsByTagName("th")
   box_counter = 0
-  for rows in [0..8] by 1
-    for columns in [0..8] by 1
-      boxes[box_counter].innerHTML = solved[rows][columns]
+  for a_row in [0..8] by 1
+    for a_column in [0..8] by 1
+      boxes[box_counter].innerHTML = solved[a_row][a_column]
       box_counter++
 
 #Updates the HTML to show that there was a contradiction
 output_contradiction = ->
   message = document.getElementById('messages')
   message.innerHTML = "EPIC FAIL! Your sudoku puzzle is impossible to solve. Edit your sudoku puzzle and try again."
-  
+
 
 #Removes possible values from a position if that value appears in the same row
 row_removing = (grid) ->
-  for rows in [0..8] by 1
-    for columns in [0..8] by 1
-      if(Array.isArray(grid[rows][columns]))
+  for a_row in [0..8] by 1
+    for a_column in [0..8] by 1
+      if(Array.isArray(grid[a_row][a_column]))
         for col_vals in [0..8] by 1
-          if((col_vals == columns) or (Array.isArray(grid[rows][col_vals])))
+          if((col_vals == a_column) or (Array.isArray(grid[a_row][col_vals])))
             continue
-          grid[rows][columns] = remove_value(grid[rows][col_vals], grid[rows][columns])
+          grid[a_row][a_column] = remove_value(grid[a_row][col_vals], grid[a_row][a_column])
   return grid
 
 #Removes the value val from old_array and returns the updated array without val
@@ -164,32 +164,32 @@ remove_value = (val, old_array) ->
 
 #Removes possible values from a position if that value appears in the same column
 column_removing = (grid) ->
-  for rows in [0..8] by 1
-    for columns in [0..8] by 1
-      if(Array.isArray(grid[rows][columns]))
+  for a_row in [0..8] by 1
+    for a_column in [0..8] by 1
+      if(Array.isArray(grid[a_row][a_column]))
         for row_vals in [0..8] by 1
-          if((row_vals == rows) or (Array.isArray(grid[row_vals][columns])))
+          if((row_vals == a_row) or (Array.isArray(grid[row_vals][a_column])))
             continue
-          grid[rows][columns] = remove_value(grid[row_vals][columns], grid[rows][columns])
+          grid[a_row][a_column] = remove_value(grid[row_vals][a_column], grid[a_row][a_column])
   return grid
 
-#Removes possible values from all position if that value appears in the same 3x3 box
+#Removes possible values from a position if that value appears in the same 3x3 box
 box_removing = (grid) ->
-  for rows in [0..8] by 1
-    for columns in [0..8] by 1
-      if(Array.isArray(grid[rows][columns]))
-        grid = box_solve(grid, rows, columns)
+  for a_row in [0..8] by 1
+    for a_column in [0..8] by 1
+      if(Array.isArray(grid[a_row][a_column]))
+        grid = box_solve(grid, a_row, a_column)
   return grid
 
-#Returns an updated grid with possibilities removed that occur in the same 3x3 box as position specified by row rows and column columns
-box_solve = (grid, rows, columns) ->  
-  row_range = box_range(rows)
-  column_range = box_range(columns)
+#Returns an updated grid with possibilities removed that occur in the same 3x3 box as position specified by row a_row and column a_column
+box_solve = (grid, a_row, a_column) ->
+  row_range = box_range(a_row)
+  column_range = box_range(a_column)
   for row_count in row_range by 1
     for column_count in column_range by 1
-      if(((row_count == rows) and (column_count == columns)) or Array.isArray(grid[row_count][column_count]))
+      if(((row_count == a_row) and (column_count == a_column)) or Array.isArray(grid[row_count][column_count]))
         continue
-      grid[rows][columns] = remove_value(grid[row_count][column_count], grid[rows][columns])
+      grid[a_row][a_column] = remove_value(grid[row_count][column_count], grid[a_row][a_column])
   return grid
 
 #Gets the range of positions (0-2, 3-5, or 6-8) that a position belongs to
@@ -203,82 +203,82 @@ box_range = (position) ->
 
 #Checks all positions and sets the value of a position if it's the only position in the row with a possible value
 row_possibilities = (grid) ->
-  for rows in [0..8] by 1
-    for columns in [0..8] by 1
-      if(Array.isArray(grid[rows][columns]))
-        for possible_val in grid[rows][columns] by 1
-          grid = unique_row_possibility(grid, rows, columns, possible_val)
-          if(Array.isArray(grid[rows][columns]) == false)
+  for a_row in [0..8] by 1
+    for a_column in [0..8] by 1
+      if(Array.isArray(grid[a_row][a_column]))
+        for possible_val in grid[a_row][a_column] by 1
+          grid = unique_row_possibility(grid, a_row, a_column, possible_val)
+          if(Array.isArray(grid[a_row][a_column]) == false)
             break
   return grid
-        
-#Checks position at row rows and column columns to see if value possible_val is a unique possibility in a row.
+
+#Checks position at row a_row and column a_column to see if value possible_val is a unique possibility in a row.
 #If it is unique, grid is updated and returned
-unique_row_possibility = (grid, rows, columns, possible_val) ->
+unique_row_possibility = (grid, a_row, a_column, possible_val) ->
   only_possible_place = true
   for col_vals in [0..8] by 1
-    if(col_vals == columns)
+    if(col_vals == a_column)
       continue
-    if(Array.isArray(grid[rows][col_vals]) == false)
-      if(grid[rows][col_vals] == possible_val)
+    if(Array.isArray(grid[a_row][col_vals]) == false)
+      if(grid[a_row][col_vals] == possible_val)
         only_possible_place = false
-      continue        
-    for other_possible_val in grid[rows][col_vals]
+      continue
+    for other_possible_val in grid[a_row][col_vals]
       if other_possible_val == possible_val
         only_possible_place = false
   if(only_possible_place == true)
-    grid[rows][columns] = possible_val
+    grid[a_row][a_column] = possible_val
   return grid
 
 #Checks all possibilities and sets the value of a position if it's the only position in the column with a possible value
 column_possibilities = (grid) ->
-  for rows in [0..8] by 1
-    for columns in [0..8] by 1
-      if(Array.isArray(grid[rows][columns]))
-        for possible_val in grid[rows][columns] by 1
-          grid = unique_column_possibility(grid, rows, columns, possible_val)
-          if(Array.isArray(grid[rows][columns]) == false)
+  for a_row in [0..8] by 1
+    for a_column in [0..8] by 1
+      if(Array.isArray(grid[a_row][a_column]))
+        for possible_val in grid[a_row][a_column] by 1
+          grid = unique_column_possibility(grid, a_row, a_column, possible_val)
+          if(Array.isArray(grid[a_row][a_column]) == false)
             break
   return grid
 
-#Checks position at row rows and column columns to see if value possible_val is a unique possibility in a column.
+#Checks position at row a_row and column a_column to see if value possible_val is a unique possibility in a column.
 #If it is unique, grid is updated and returned
-unique_column_possibility = (grid, rows, columns, possible_val) ->
+unique_column_possibility = (grid, a_row, a_column, possible_val) ->
   only_possible_place = true
   for row_vals in [0..8] by 1
-    if(row_vals == rows)
+    if(row_vals == a_row)
       continue
-    if(Array.isArray(grid[row_vals][columns]) == false)
-      if(grid[row_vals][columns] == possible_val)
+    if(Array.isArray(grid[row_vals][a_column]) == false)
+      if(grid[row_vals][a_column] == possible_val)
         only_possible_place = false
       continue
-    for other_possible_val in grid[row_vals][columns]
+    for other_possible_val in grid[row_vals][a_column]
       if other_possible_val == possible_val
         only_possible_place = false
   if(only_possible_place == true)
-    grid[rows][columns] = possible_val
+    grid[a_row][a_column] = possible_val
   return grid
 
 #Checks all possibilities and sets the value of a position if it's the only position in a 3x3 box with a possible value
 box_possibilities = (grid) ->
-  for rows in [0..8] by 1
-    for columns in [0..8] by 1
-      if(Array.isArray(grid[rows][columns]))
-        for possible_val in grid[rows][columns] by 1
-          grid = unique_box_possibility(grid, rows, columns, possible_val)
-        if(Array.isArray(grid[rows][columns] == false))
+  for a_row in [0..8] by 1
+    for a_column in [0..8] by 1
+      if(Array.isArray(grid[a_row][a_column]))
+        for possible_val in grid[a_row][a_column] by 1
+          grid = unique_box_possibility(grid, a_row, a_column, possible_val)
+        if(Array.isArray(grid[a_row][a_column] == false))
           break
   return grid
 
-#Checks position at row rows and column columns to see if value possible_val is a unique possibility in a 3x3 box.
+#Checks position at row a_row and column a_column to see if value possible_val is a unique possibility in a 3x3 box.
 #If it is unique, grid is updated and returned
-unique_box_possibility = (grid, rows, columns, possible_val) ->
+unique_box_possibility = (grid, a_row, a_column, possible_val) ->
   only_possible_place = true
-  row_range = box_range(rows)
-  column_range = box_range(columns)
+  row_range = box_range(a_row)
+  column_range = box_range(a_column)
   for row_count in row_range by 1
     for column_count in column_range by 1
-      if((row_count == rows) and (column_count == columns))
+      if((row_count == a_row) and (column_count == a_column))
         continue
       if(Array.isArray(grid[row_count][column_count]) == false)
         if(grid[row_count][column_count] == possible_val)
@@ -288,82 +288,82 @@ unique_box_possibility = (grid, rows, columns, possible_val) ->
         if other_possible_val == possible_val
           only_possible_place = false
   if(only_possible_place == true)
-    grid[rows][columns] = possible_val
+    grid[a_row][a_column] = possible_val
   return grid
 
 #Checks if there is a contradiction in the sudoku puzzle and returns true or false
 has_contradiction = (grid) ->
-  for rows in [0..8] by 1
-    for columns in [0..8] by 1
+  for a_row in [0..8] by 1
+    for a_column in [0..8] by 1
       check_contradictions = [zero_possibilities, row_repeats, column_repeats, box_repeats]
       for counter in [0..3] by 1
-        con_exists = check_contradictions[counter](grid, rows, columns)
+        con_exists = check_contradictions[counter](grid, a_row, a_column)
         if(con_exists == true)
           return true
   return false
 
-#Returns true if at position [rows][columns] there are no possibilities
-zero_possibilities = (grid, rows, columns) ->
-  if((Array.isArray(grid[rows][columns])) and (grid[rows][columns].length == 0))
+#Returns true if at position [a_row][a_column] there are no possibilities
+zero_possibilities = (grid, a_row, a_column) ->
+  if((Array.isArray(grid[a_row][a_column])) and (grid[a_row][a_column].length == 0))
     return true
   return false
 
-#Returns true if another position in the row rows has the same value as [rows][columns]
-row_repeats = (grid, rows, columns) ->
-  if(Array.isArray(grid[rows][columns]) == false)
+#Returns true if another position in the row a_row has the same value as [a_row][a_column]
+row_repeats = (grid, a_row, a_column) ->
+  if(Array.isArray(grid[a_row][a_column]) == false)
     for column_vals in [0..8] by 1
-      if((column_vals == columns) or (Array.isArray(grid[rows][column_vals])))
+      if((column_vals == a_column) or (Array.isArray(grid[a_row][column_vals])))
         continue
-      if(grid[rows][column_vals] == grid[rows][columns])
+      if(grid[a_row][column_vals] == grid[a_row][a_column])
         return true
   return false
 
-#Returns true if another position in the column columns has the same value as [rows][columns]
-column_repeats = (grid, rows, columns) ->
-  if(Array.isArray(grid[rows][columns]) == false)
+#Returns true if another position in the column a_column has the same value as [a_row][a_column]
+column_repeats = (grid, a_row, a_column) ->
+  if(Array.isArray(grid[a_row][a_column]) == false)
     for row_vals in [0..8] by 1
-      if((row_vals == rows) or (Array.isArray(grid[row_vals][columns])))
+      if((row_vals == a_row) or (Array.isArray(grid[row_vals][a_column])))
         continue
-      if(grid[row_vals][columns] == grid[rows][columns])
+      if(grid[row_vals][a_column] == grid[a_row][a_column])
         return true
   return false
 
-#Returns true if another position in the 3x3 box has the same value as [rows][columns]
-box_repeats = (grid, rows, columns) ->
-  if(Array.isArray(grid[rows][columns]) == false)
-    row_range = box_range(rows)
-    column_range = box_range(columns)
+#Returns true if another position in the 3x3 box has the same value as [a_row][a_column]
+box_repeats = (grid, a_row, a_column) ->
+  if(Array.isArray(grid[a_row][a_column]) == false)
+    row_range = box_range(a_row)
+    column_range = box_range(a_column)
     for row_count in row_range by 1
       for column_count in column_range by 1
-        if(((row_count == rows) and (column_count == columns)) or (Array.isArray(grid[row_count][column_count])))
+        if(((row_count == a_row) and (column_count == a_column)) or (Array.isArray(grid[row_count][column_count])))
           continue
-        if(grid[row_count][column_count] == grid[rows][columns])
+        if(grid[row_count][column_count] == grid[a_row][a_column])
           return true
   return false
 
 #Returns true if there is a position with a value that had only possibilities before
 has_changed = (grid_snapshot, grid) ->
-  for rows in [0..8] by 1
-    for columns in [0..8] by 1
-      if((Array.isArray(grid_snapshot[rows][columns])) and (Array.isArray(grid[rows][columns]) == false))
+  for a_row in [0..8] by 1
+    for a_column in [0..8] by 1
+      if((Array.isArray(grid_snapshot[a_row][a_column])) and (Array.isArray(grid[a_row][a_column]) == false))
         return true
   return false
 
 #If our logic can't figure anything out, there's no choice but to guess.
-#This function takes the position with the lowest possibilities and makes guesses. 
+#This function takes the position with the lowest possibilities and makes guesses.
 #False is returned if it's impossible to solve
 guess = (grid) ->
   lowest_length = 10
   lowest_row
   lowest_column
-  for rows in [0..8] by 1
-    for columns in [0..8] by 1
-      if(Array.isArray(grid[rows][columns]) == false)
+  for a_row in [0..8] by 1
+    for a_column in [0..8] by 1
+      if(Array.isArray(grid[a_row][a_column]) == false)
         continue
-      if(grid[rows][columns].length < lowest_length)
-        lowest_row = rows
-        lowest_column = columns
-        lowest_length = grid[rows][columns].length
+      if(grid[a_row][a_column].length < lowest_length)
+        lowest_row = a_row
+        lowest_column = a_column
+        lowest_length = grid[a_row][a_column].length
       if(lowest_length == 2)
         break
     if(lowest_length == 2)
@@ -383,17 +383,15 @@ guess_to_solve = (grid,lowest_row,lowest_column) ->
     return false
   return grid
 
-#returns an exact, new clone of the array
+#returns an exact, new clone of the grid
 grid_clone = (grid) ->
   clone = [[],[],[],[],[],[],[],[],[]]
-  for rows in [0..8] by 1
-    for columns in [0..8] by 1
-      if(Array.isArray(grid[rows][columns]))
-        clone[rows][columns] = []
-        for possibilities in [0..(grid[rows][columns].length - 1)] by 1
-          clone[rows][columns][possibilities] = grid[rows][columns][possibilities]
+  for a_row in [0..8] by 1
+    for a_column in [0..8] by 1
+      if(Array.isArray(grid[a_row][a_column]))
+        clone[a_row][a_column] = []
+        for possibilities in [0..(grid[a_row][a_column].length - 1)] by 1
+          clone[a_row][a_column][possibilities] = grid[a_row][a_column][possibilities]
       else
-        clone[rows][columns] = grid[rows][columns]
+        clone[a_row][a_column] = grid[a_row][a_column]
   return clone
-      
-    
